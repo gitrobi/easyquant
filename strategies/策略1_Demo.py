@@ -62,7 +62,7 @@ class Strategy(StrategyTemplate):
         print('demo1 的 log 使用自定义 log 的方式记录在 demo1.log')
         self.log.info('\n\n策略1触发')
         self.log.info('行情数据: 万科价格: %s' % event.data['000002'])
-        self.log.info('检查持仓')
+        self.log.info('检查资金')
         self.log.info(self.user.balance)
         self.log.info('\n')
 
