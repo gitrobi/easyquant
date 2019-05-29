@@ -183,6 +183,7 @@ class MainEngine:
         s_folder = 'strategies'
         self._names = names
         strategies = os.listdir(s_folder)
+        strategies = sorted(strategies) # 按名称排序
         strategies = filter(lambda file: file.endswith('.py') and file != '__init__.py', strategies)
         importlib.import_module(s_folder)
         for strategy_file in strategies:

@@ -18,7 +18,7 @@ elif choose == '4':
 elif choose == '5':
     broker = 'gf'
 else:
-    broker = None
+    broker = 'xq'
 
 
 def get_broker_need_data(choose_broker):
@@ -41,9 +41,9 @@ class LFEngine(PushBaseEngine):
         return self.source.stocks(['162411', '000002'])
 
 
-quotation_choose = input('请输入使用行情引擎 1: sina 2: leverfun 十档 行情(目前只选择了 162411, 000002)\n:')
+# quotation_choose = input('请输入使用行情引擎 1: sina 2: leverfun 十档 行情(目前只选择了 162411, 000002)\n:')
 
-quotation_engine = DefaultQuotationEngine if quotation_choose == '1' else LFEngine
+quotation_engine = DefaultQuotationEngine # if quotation_choose == '1' else LFEngine
 
 push_interval = int(input('请输入行情推送间隔(s)\n:'))
 quotation_engine.PushInterval = push_interval
