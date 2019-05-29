@@ -14,3 +14,6 @@ xq:
   "password": "加密后的密码",
   "portfolio_code": "组合代码(例:ZH818559)"
 }
+
+在线测试regex网址:
+http://tool.oschina.net/regex/
