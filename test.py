@@ -7,8 +7,9 @@ print('easyquant 测试 DEMO')
 print('请输入你使用的券商:')
 choose = input('1: 华泰 2: 佣金宝 3: 银河 4: 雪球模拟组合 5: 广发\n:')
 
-broker = 'ht'
-if choose == '2':
+if choose == '1':
+    broker = 'ht'
+elif choose == '2':
     broker = 'yjb'
 elif choose == '3':
     broker = 'yh'
@@ -16,6 +17,8 @@ elif choose == '4':
     broker = 'xq'
 elif choose == '5':
     broker = 'gf'
+else:
+    broker = None
 
 
 def get_broker_need_data(choose_broker):
