@@ -16,7 +16,7 @@ from .fixeddataengine import FixedDataEngine
 
 
 class FixedMainEngine(MainEngine):
-    def __init__(self, broker, need_data='ht.json', quotation_engines=[FixedDataEngine],
+    def __init__(self, broker, need_data='xq.json', quotation_engines=[FixedDataEngine],
                  log_handler=DefaultLogHandler(), ext_stocks=[]):
         super(FixedMainEngine, self).__init__(broker, need_data, [], log_handler)
         if type(quotation_engines) != list:

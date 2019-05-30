@@ -3,12 +3,11 @@ import datetime
 from collections import deque
 from threading import Thread
 
-import pandas as pd
 import arrow
 from dateutil import tz
 
 import time
-from ..easydealutils import time as etime
+from easyutils import timeutils
 from ..event_engine import Event
 
 
@@ -78,7 +77,7 @@ class ClockMomentHandler:
         """
         if self.is_active():
             if self.is_trading_date:
-                next_date = etime.get_next_trade_date(self.clock_engine.now_dt)
+                next_date = timeutils.get_next_trade_date(self.clock_engine.now_dt)
             else:
                 next_date = self.next_time.date() + datetime.timedelta(days=1)
 
@@ -88,7 +87,7 @@ class ClockMomentHandler:
             )
 
     def is_active(self):
-        if self.is_trading_date and not etime.is_trade_date(self.clock_engine.now_dt):
+        if self.is_trading_date and not timeutils.is_trade_date(self.clock_engine.now_dt):
             # 仅在交易日触发时的判断
             return False
         return self.next_time <= self.clock_engine.now_dt
@@ -114,7 +113,7 @@ class ClockEngine:
         self.is_active = True
         self.clock_engine_thread = Thread(target=self.clocktick, name="ClockEngine.clocktick")
         self.sleep_time = 1
-        self.trading_state = True if (etime.is_tradetime(datetime.datetime.now()) and etime.is_trade_date(datetime.datetime.now())) else False
+        self.trading_state = True if (timeutils.is_trade_time(datetime.datetime.now()) and timeutils.is_trade_date(datetime.datetime.now())) else False
         self.clock_moment_handlers = deque()
         self.clock_interval_handlers = set()
 
@@ -172,7 +171,7 @@ class ClockEngine:
             time.sleep(self.sleep_time)
 
     def tock(self):
-        if not etime.is_trade_date(self.now_dt):
+        if not timeutils.is_trade_date(self.now_dt):
             pass  # 假日暂停时钟引擎
         else:
             self._tock()
@@ -202,11 +201,11 @@ class ClockEngine:
     def stop(self):
         self.is_active = False
 
-    def is_tradetime_now(self):
+    def is_trade_time_now(self):
         """
         :return:
         """
-        return etime.is_tradetime(self.now_dt)
+        return timeutils.is_trade_time(self.now_dt)
 
     def register_moment(self, clock_type, moment, makeup=False):
         return self._register_moment(clock_type, moment, makeup=makeup)

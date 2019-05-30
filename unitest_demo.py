@@ -7,10 +7,10 @@ import unittest
 from unittest import mock
 import datetime
 import pandas as pd
-from easyquant.easydealutils.time import get_next_trade_date, is_trade_date
-import arrow
 
 from dateutil import tz
+
+from easyutils.timeutils import get_next_trade_date, is_trade_date
 from easyquant.main_engine import MainEngine
 from easyquant.push_engine.clock_engine import ClockEngine, ClockMomentHandler
 from easyquant.event_engine import EventEngine
@@ -18,7 +18,7 @@ from easyquant.event_engine import EventEngine
 __author__ = 'Shawn'
 
 # 需要制定一个有效的证券账户信息
-main_engine = MainEngine('ht', "tmp/ht.json")
+main_engine = MainEngine('xq', "xq.json")
 
 
 class BaseTest(unittest.TestCase):
@@ -59,7 +59,7 @@ class TestClock(BaseTest):
 
         now = datetime.datetime.combine(self.trade_date, self.time)
         # 此处重新定义 main_engine
-        self._main_engine = MainEngine('ht', 'tmp/ht.json')
+        self._main_engine = MainEngine('xq', 'xq.json')
 
         # 设置为不在交易中
         self.clock_engine.trading_state = False
