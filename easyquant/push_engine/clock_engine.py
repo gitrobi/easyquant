@@ -11,88 +11,6 @@ from easyutils import timeutils
 from ..event_engine import Event
 
 
-class Clock:
-    def __init__(self, trading_time, clock_event):
-        self.trading_state = trading_time
-        self.clock_event = clock_event
-
-
-class ClockIntervalHandler:
-    def __init__(self, clock_engine, interval, trading=True, call=None):
-        """
-        :param interval: float(minute)
-        :param trading: 在交易阶段才触发
-        :return:
-        """
-        self.clock_engine = clock_engine
-        self.clock_type = interval
-        self.interval = interval
-        self.second = int(interval * 60)
-        self.trading = trading
-        self.call = call or (lambda: None)
-
-    def is_active(self):
-        if self.trading:
-            if not self.clock_engine.trading_state:
-                return False
-        return int(self.clock_engine.now) % self.second == 0
-
-    def __eq__(self, other):
-        if isinstance(other, ClockIntervalHandler):
-            return self.interval == other.interval
-        else:
-            return False
-
-    def __hash__(self):
-        return self.second
-
-
-class ClockMomentHandler:
-    def __init__(self, clock_engine, clock_type, moment=None, is_trading_date=True, makeup=False, call=None):
-        """
-        :param clock_type:
-        :param moment: datetime.time
-        :param is_trading_date: bool(是否只有在交易日触发)
-        :param makeup: 注册时,如果已经过了触发时机,是否立即触发
-        :return:
-        """
-        self.clock_engine = clock_engine
-        self.clock_type = clock_type
-        self.moment = moment
-        self.is_trading_date = is_trading_date
-        self.makeup = makeup
-        self.call = call or (lambda: None)
-        self.next_time = datetime.datetime.combine(
-                self.clock_engine.now_dt.date(),
-                self.moment,
-        )
-
-        if not self.makeup and self.is_active():
-            self.update_next_time()
-
-    def update_next_time(self):
-        """
-        下次激活时间
-        :return:
-        """
-        if self.is_active():
-            if self.is_trading_date:
-                next_date = timeutils.get_next_trade_date(self.clock_engine.now_dt)
-            else:
-                next_date = self.next_time.date() + datetime.timedelta(days=1)
-
-            self.next_time = datetime.datetime.combine(
-                    next_date,
-                    self.moment
-            )
-
-    def is_active(self):
-        if self.is_trading_date and not timeutils.is_trade_date(self.clock_engine.now_dt):
-            # 仅在交易日触发时的判断
-            return False
-        return self.next_time <= self.clock_engine.now_dt
-
-
 class ClockEngine:
     """
     时间推送引擎
@@ -227,3 +145,88 @@ class ClockEngine:
         handler = ClockIntervalHandler(self, interval_minute, trading, call)
         self.clock_interval_handlers.add(handler)
         return handler
+
+
+
+class Clock:
+    def __init__(self, trading_time, clock_event):
+        self.trading_state = trading_time
+        self.clock_event = clock_event
+
+
+class ClockIntervalHandler:
+    def __init__(self, clock_engine, interval, trading=True, call=None):
+        """
+        :param interval: float(minute)
+        :param trading: 在交易阶段才触发
+        :return:
+        """
+        self.clock_engine = clock_engine
+        self.clock_type = interval
+        self.interval = interval
+        self.second = int(interval * 60)
+        self.trading = trading
+        self.call = call or (lambda: None)
+
+    def is_active(self):
+        if self.trading:
+            if not self.clock_engine.trading_state:
+                return False
+        return int(self.clock_engine.now) % self.second == 0
+
+    def __eq__(self, other):
+        if isinstance(other, ClockIntervalHandler):
+            return self.interval == other.interval
+        else:
+            return False
+
+    def __hash__(self):
+        return self.second
+
+
+class ClockMomentHandler:
+    def __init__(self, clock_engine, clock_type, moment=None, is_trading_date=True, makeup=False, call=None):
+        """
+        :param clock_type:
+        :param moment: datetime.time
+        :param is_trading_date: bool(是否只有在交易日触发)
+        :param makeup: 注册时,如果已经过了触发时机,是否立即触发
+        :return:
+        """
+        self.clock_engine = clock_engine
+        self.clock_type = clock_type
+        self.moment = moment
+        self.is_trading_date = is_trading_date
+        self.makeup = makeup
+        self.call = call or (lambda: None)
+        self.next_time = datetime.datetime.combine(
+                self.clock_engine.now_dt.date(),
+                self.moment,
+        )
+
+        if not self.makeup and self.is_active():
+            self.update_next_time()
+
+    def update_next_time(self):
+        """
+        下次激活时间
+        :return:
+        """
+        if self.is_active():
+            if self.is_trading_date:
+                next_date = timeutils.get_next_trade_date(self.clock_engine.now_dt)
+            else:
+                next_date = self.next_time.date() + datetime.timedelta(days=1)
+
+            self.next_time = datetime.datetime.combine(
+                    next_date,
+                    self.moment
+            )
+
+    def is_active(self):
+        if self.is_trading_date and not timeutils.is_trade_date(self.clock_engine.now_dt):
+            # 仅在交易日触发时的判断
+            return False
+        return self.next_time <= self.clock_engine.now_dt
+
+

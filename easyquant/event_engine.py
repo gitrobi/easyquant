@@ -3,14 +3,6 @@ from queue import Queue, Empty
 from threading import Thread
 
 
-class Event:
-    """事件对象"""
-
-    def __init__(self, event_type, data=None):
-        self.event_type = event_type
-        self.data = data
-
-
 class EventEngine:
     """事件驱动引擎"""
 
@@ -77,3 +69,11 @@ class EventEngine:
     @property
     def queue_size(self):
         return self.__queue.qsize()
+
+
+class Event:
+    """事件对象"""
+
+    def __init__(self, event_type, data=None):
+        self.event_type = event_type
+        self.data = data
