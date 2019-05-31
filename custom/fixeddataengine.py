@@ -57,9 +57,10 @@ class FixedDataEngine(PushBaseEngine):
 
     def push_quotation(self):
         while self.is_active:
-            if self.is_pause:
-                time.sleep(1)
-                continue
+            # Robi
+            # if self.is_pause:
+            #     time.sleep(1)
+            #     continue
             try:
                 response_data = self.fetch_quotation()
             except aiohttp.errors.ServerDisconnectedError:
