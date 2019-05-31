@@ -10,7 +10,7 @@ logbook.set_datetime_format('local')
 class DefaultLogHandler(object):
     """默认的 Log 类"""
 
-    def __init__(self, name='default', log_type='stdout', filepath='default.log', loglevel='DEBUG'):
+    def __init__(self, name='default', log_type='stdout', filepath='logs/default.log', loglevel='DEBUG'):
         """Log对象
         :param name: log 名字
         :param :logtype: 'stdout' 输出到屏幕, 'file' 输出到指定文件

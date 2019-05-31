@@ -48,12 +48,13 @@ quotation_engine = DefaultQuotationEngine # if quotation_choose == '1' else LFEn
 push_interval = int(input('请输入行情推送间隔(s)\n:'))
 quotation_engine.PushInterval = push_interval
 
-log_type_choose = input('请输入 log 记录方式: 1: 显示在屏幕 2: 记录到指定文件\n: ')
-log_type = 'stdout' if log_type_choose == '1' else 'file'
+#log_type_choose = input('请输入 log 记录方式: 1: 显示在屏幕 2: 记录到指定文件\n: ')
+#log_type = 'stdout' if log_type_choose == '1' else 'file'
+log_type = 'stdout'
 
-log_filepath = input('请输入 log 文件记录路径\n: ') if log_type == 'file' else ''
+#log_filepath = input('请输入 log 文件记录路径\n: ') if log_type == 'file' else ''
 
-log_handler = DefaultLogHandler(name='测试', log_type=log_type, filepath=log_filepath)
+log_handler = DefaultLogHandler(name='测试', log_type=log_type)
 
 m = easyquant.MainEngine(broker, need_data, quotation_engines=[quotation_engine], log_handler=log_handler)
 m.is_watch_strategy = True  # 策略文件出现改动时,自动重载,不建议在生产环境下使用
